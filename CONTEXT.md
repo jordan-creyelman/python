@@ -1,0 +1,92 @@
+# Contexte global — Projets Python
+
+## Mission
+
+Servir de référence commune pour concevoir, développer, maintenir et faire évoluer de futurs projets Python : scripts, automatisations, outils CLI, APIs, applications et expérimentations.
+
+## Principes
+
+- Privilégier la simplicité, la lisibilité, la maintenabilité et la fiabilité.
+- Commencer par clarifier l'objectif, les entrées/sorties, les contraintes et les critères de réussite.
+- Ne pas choisir une architecture ou une dépendance sans besoin concret.
+- Faire évoluer le projet progressivement : petite version fonctionnelle, puis améliorations ciblées.
+- Préserver la compatibilité et les fonctionnalités existantes lors des modifications.
+
+## Environnement
+
+- Utiliser une version de Python récente et maintenue, adaptée aux dépendances et à la cible d'exécution ; consigner la version choisie dans chaque projet.
+- Isoler les dépendances avec un environnement virtuel (`python -m venv .venv`).
+- Déclarer explicitement les dépendances et, pour les applications, figer des versions reproductibles.
+- Préférer `pyproject.toml` pour configurer le projet et ses outils lorsque cela est pertinent.
+- Ne jamais versionner `.venv/`, les caches, les secrets ou les fichiers générés temporaires.
+
+## Architecture indicative
+
+Pour un projet suffisamment structuré :
+
+```text
+mon-projet/
+├── README.md
+├── AGENTS.md
+├── pyproject.toml
+├── .gitignore
+├── .env.example          # uniquement si nécessaire
+├── src/
+│   └── mon_projet/
+│       ├── __init__.py
+│       └── main.py
+└── tests/
+    └── test_main.py
+```
+
+Pour un petit script, une structure plus légère est préférable. Ne pas créer des dossiers vides inutilement.
+
+## Style de code
+
+- Respecter PEP 8 et adopter des noms explicites.
+- Utiliser les annotations de type pour les interfaces importantes.
+- Écrire des fonctions courtes avec une responsabilité claire.
+- Ajouter des docstrings utiles aux fonctions publiques et aux comportements non évidents.
+- Éviter les duplications, les constantes magiques et les abstractions prématurées.
+- Utiliser `pathlib` pour manipuler les chemins et `logging` pour les journaux d'exécution.
+- Isoler les effets de bord (fichiers, réseau, bases de données) du code métier quand c'est pertinent.
+
+## Qualité et tests
+
+- Préférer `pytest` pour les tests, sauf contrainte contraire.
+- Couvrir les comportements critiques, les cas limites et les erreurs attendues.
+- Utiliser `ruff` pour le lint et le formatage lorsque le projet le permet.
+- Ajouter une vérification de types (par exemple `mypy` ou `pyright`) si la complexité le justifie.
+- Avant livraison : exécuter les tests et contrôles disponibles ; signaler clairement ceux qui n'ont pas été exécutés.
+- Ne jamais prétendre qu'un test est passé sans l'avoir lancé.
+
+## Sécurité et robustesse
+
+- Aucun secret, jeton, mot de passe ou clé API dans le code ou l'historique Git.
+- Utiliser des variables d'environnement pour la configuration sensible et fournir `.env.example` sans valeurs confidentielles si nécessaire.
+- Valider les données externes, gérer les erreurs de manière précise et éviter les `except:` silencieux.
+- Définir des délais d'attente pour les appels réseau et limiter les tentatives répétées.
+- Ne pas exécuter de commandes, supprimer des données ou modifier la production sans nécessité explicite.
+- Maintenir les dépendances et éviter celles qui sont inutiles.
+
+## Documentation attendue par projet
+
+Chaque projet doit expliquer :
+1. Son objectif et son périmètre.
+2. Les prérequis et l'installation.
+3. Les commandes pour démarrer, tester et vérifier le code.
+4. La configuration nécessaire, sans secrets.
+5. Les principales décisions et limites connues.
+
+## Façon de travailler
+
+1. Comprendre la demande et examiner l'existant.
+2. Proposer l'approche la plus simple qui couvre le besoin.
+3. Modifier uniquement les fichiers nécessaires.
+4. Ajouter ou adapter les tests pertinents.
+5. Vérifier les résultats.
+6. Résumer les changements, les commandes utiles et les points restant à traiter.
+
+## Adaptation
+
+Ce contexte est un point de départ. Les consignes propres à un projet, ses exigences métier, son environnement et ses choix techniques validés sont prioritaires. Mettre à jour ce document lorsque les conventions générales évoluent.
