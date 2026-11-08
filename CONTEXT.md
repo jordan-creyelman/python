@@ -12,6 +12,43 @@ Servir de référence commune pour concevoir, développer, maintenir et faire é
 - Faire évoluer le projet progressivement : petite version fonctionnelle, puis améliorations ciblées.
 - Préserver la compatibilité et les fonctionnalités existantes lors des modifications.
 
+## Règles de conception prioritaires
+
+- **PEP 8** : formatage cohérent, nommage explicite, imports organisés, code Python idiomatique.
+- **KISS (Keep It Simple, Stupid)** : choisir la solution la plus simple qui fonctionne ; refuser la complexité spéculative.
+- **Fonctions modulaires** : petites fonctions cohérentes, une responsabilité, arguments et valeurs de retour clairs ; privilégier des fonctions pures quand c'est possible.
+- **Clean Code** : code auto-explicatif, faible duplication, gestion explicite des erreurs, intention claire ; commentaires pour le « pourquoi », pas pour répéter le code.
+- **SOLID** : appliquer les cinq principes quand ils aident réellement à faire évoluer une conception orientée objet ; ne pas ajouter de classes ou d'interfaces artificielles.
+- **Clean Architecture** : séparer règles métier, orchestration et infrastructure lorsqu'il existe une complexité qui le justifie ; les détails techniques dépendent du métier, pas l'inverse.
+- **YAGNI** : ne pas anticiper des fonctionnalités ou couches non demandées.
+- **Tests** : concevoir les composants pour être testables isolément, sans multiplier les mocks inutilement.
+
+## Architecture proportionnée à la taille du projet
+
+Choisir en fonction de la complexité métier, des dépendances, des intégrations et de la maintenance attendue — pas seulement du nombre de lignes.
+
+### Petit projet — script ou utilitaire ponctuel
+
+- Un ou quelques fichiers Python, fonctions réutilisables et point d'entrée `main()`.
+- Aucun dossier `domain/`, `application/` ou interface abstraite par défaut.
+- Extraire un module seulement si cela améliore réellement la compréhension ou la réutilisation.
+
+### Projet moyen — application, CLI ou API avec plusieurs fonctionnalités
+
+- Organiser en modules par responsabilité ou par fonctionnalité.
+- Séparer la logique métier des entrées/sorties, du framework et de la persistance.
+- Garder des dépendances explicites et des tests ciblés.
+- Introduire des services ou des interfaces seulement lorsque plusieurs implémentations ou tests le justifient.
+
+### Grand projet — domaine complexe et évolution durable
+
+- Envisager **Clean Architecture** : `domain/` (règles métier), `application/` (cas d'usage), `infrastructure/` (BDD, API, fichiers), `interfaces/` (HTTP, CLI, UI).
+- Les dépendances de code pointent vers l'intérieur : la logique métier ne dépend ni du framework, ni de la base de données.
+- Définir des contrats aux frontières lorsque c'est utile ; privilégier la composition et l'injection explicite des dépendances.
+- Appliquer SOLID pour limiter le couplage, sans complexité cérémonielle.
+
+**Règle d'arbitrage : KISS et besoin concret priment sur l'application mécanique d'un pattern ou d'un principe SOLID.** Refactoriser vers plus de structure quand des besoins observables apparaissent.
+
 ## Environnement
 
 - Utiliser une version de Python récente et maintenue, adaptée aux dépendances et à la cible d'exécution ; consigner la version choisie dans chaque projet.
