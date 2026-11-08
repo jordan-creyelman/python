@@ -49,6 +49,45 @@ Choisir en fonction de la complexité métier, des dépendances, des intégratio
 
 **Règle d'arbitrage : KISS et besoin concret priment sur l'application mécanique d'un pattern ou d'un principe SOLID.** Refactoriser vers plus de structure quand des besoins observables apparaissent.
 
+## Philosophie et arbitrage
+
+**Simple by default, modular by design, scalable when needed.**
+
+En cas d'arbitrage, viser dans cet ordre : correction du comportement, simplicité, lisibilité, maintenabilité, testabilité, modularité, évolutivité, puis performance mesurée. La sécurité et les contraintes métier restent impératives, pas des optimisations facultatives.
+
+## Conception et bonnes pratiques complémentaires
+
+- **Type hints** : annoter les interfaces importantes, les paramètres et les retours ; éviter d'ajouter des types qui nuisent à la lisibilité.
+- **Fail fast** : valider les préconditions et les entrées aux frontières ; produire des erreurs explicites et exploitables.
+- **Separation of concerns** : isoler métier, orchestration, présentation et accès aux ressources lorsque cela simplifie l'évolution.
+- **Dependency injection** : passer explicitement les dépendances nécessaires (paramètres, constructeurs) ; ne pas installer un conteneur DI sans besoin.
+- **Tests centrés sur le comportement** : vérifier cas nominaux, limites et erreurs ; limiter les mocks aux frontières externes.
+- **Explicit is better than implicit** : éviter les effets de bord cachés, l'état global mutable et les conventions magiques.
+- **Composition over inheritance** : composer des comportements avant de construire des hiérarchies d'héritage.
+- **Observabilité** : utiliser `logging`, des messages contextualisés et des diagnostics utiles ; journaliser sans divulguer de secrets.
+- **Configuration** : distinguer configuration, secrets et logique ; valider les paramètres au démarrage ; fournir des exemples non sensibles.
+- **Documentation as code** : maintenir README, exemples d'usage et décisions techniques avec les changements correspondants.
+
+## Garde-fous anti-surarchitecture
+
+- Une fonction plutôt qu'une classe quand elle suffit.
+- Pas d'interface abstraite avec une seule implémentation sans besoin documenté.
+- Pas de pattern ou de couche supplémentaire sans problème concret.
+- Ne pas fractionner des fonctions triviales en une multitude de fichiers.
+- Ne pas ajouter de bibliothèque, de framework ou de service avant d'en justifier l'utilité.
+- Ne pas anticiper des fonctionnalités hypothétiques ; refactoriser progressivement quand le besoin apparaît.
+- DDD, CQRS et architecture hexagonale complète ne sont jamais des obligations par défaut.
+
+## Outillage et automatisation proportionnés
+
+- **Ruff** pour lint et formatage, **pytest** pour les tests.
+- **Mypy ou Pyright** pour vérifier les types si la taille ou le risque le justifie.
+- **pre-commit** pour lancer les contrôles locaux lorsque l'équipe ou le projet en bénéficie.
+- **GitHub Actions** pour vérifier lint, types et tests à chaque pull request sur les projets maintenus.
+- Pour un script ponctuel, privilégier la simplicité : quelques tests utiles et une vérification locale peuvent suffire.
+- Les commandes et configurations réellement choisies doivent figurer dans le README du projet.
+- Ne pas déclarer des contrôles réussis sans les avoir exécutés.
+
 ## Environnement
 
 - Utiliser une version de Python récente et maintenue, adaptée aux dépendances et à la cible d'exécution ; consigner la version choisie dans chaque projet.
