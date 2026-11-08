@@ -145,6 +145,39 @@ Pour un petit script, une structure plus légère est préférable. Ne pas crée
 - Ne pas exécuter de commandes, supprimer des données ou modifier la production sans nécessité explicite.
 - Maintenir les dépendances et éviter celles qui sont inutiles.
 
+## Contrats, erreurs et résilience
+
+- **Design by Contract** : documenter et vérifier les préconditions, postconditions et invariants utiles, sans imposer un framework de contrats.
+- **Fail fast aux frontières** : valider les entrées externes avant la logique métier, avec des messages d'erreur compréhensibles.
+- Lever des exceptions **spécifiques** et cohérentes ; préserver la cause avec `raise ... from exc` lorsque pertinent.
+- Capturer les erreurs seulement là où l'on peut les traiter, les enrichir ou les traduire pour l'appelant.
+- Ne jamais utiliser `except: pass` ni masquer un échec ; éviter `except Exception` sauf aux frontières de supervision, avec journalisation et réaction explicites.
+- Distinguer erreur métier, validation, infrastructure et bug ; ne pas transformer un bug en succès silencieux.
+- Ne pas enregistrer de secrets ou de données personnelles dans les logs ; éviter les logs multiples pour une même erreur.
+- Pour les ressources externes : timeouts systématiques ; retries limités avec backoff seulement sur opérations sûres/idempotentes et erreurs transitoires.
+- Nettoyer les ressources avec des gestionnaires de contexte (`with`) et prévoir des transactions/rollback lorsqu'il y a des écritures multiples.
+
+## Stratégie de tests unitaires et d'intégration
+
+- Utiliser **pytest** par défaut et privilégier des tests déterministes, indépendants et rapides.
+- **Tests unitaires** : isoler une fonction ou un composant métier ; vérifier entrées/sorties, cas nominaux, limites et exceptions attendues ; mocker uniquement les frontières nécessaires.
+- **Tests d'intégration** : vérifier que plusieurs composants fonctionnent ensemble (BDD, fichiers, API, sérialisation, configuration) ; préférer des ressources de test réelles et isolées quand c'est raisonnable.
+- Ne jamais appeler un service de production ou modifier des données réelles depuis les tests.
+- Ranger les tests dans `tests/unit/` et `tests/integration/` dès que leur séparation apporte un bénéfice ; un seul `tests/` suffit pour les petits projets.
+- Marquer les tests d'intégration avec `@pytest.mark.integration` si pertinent, et documenter leurs prérequis.
+- Exécuter les tests unitaires fréquemment ; exécuter les tests d'intégration en CI avec les services nécessaires.
+- Pour chaque bug corrigé, ajouter si possible un test de non-régression.
+- Mesurer la couverture sur les projets suivis si utile, mais **ne pas viser un pourcentage arbitraire au détriment de tests pertinents**.
+- Tests de bout en bout, performance et charge : uniquement si les risques du projet le justifient.
+- Commandes possibles : `pytest tests/unit`, `pytest tests/integration`, `pytest`. Adapter à la structure réelle.
+
+## Sécurité, dépendances et refactoring
+
+- **Security by Design** : valider les entrées, limiter les permissions, protéger les secrets et éviter toute exécution non maîtrisée de commandes ou contenu externe.
+- Déclarer et suivre les dépendances directes ; utiliser un fichier de verrouillage ou une méthode reproductible adaptée au projet, et examiner les mises à jour et alertes de sécurité.
+- **Refactoring incrémental** : stabiliser le comportement avec des tests avant toute modification structurelle ; effectuer de petits changements contrôlables et réexécuter les contrôles.
+- Privilégier des migrations explicites et réversibles pour les changements de schéma ou de données.
+
 ## Documentation attendue par projet
 
 Chaque projet doit expliquer :
